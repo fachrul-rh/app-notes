@@ -34,6 +34,13 @@ export default {
       this.$root.$emit('emitForm', dataform);
     },
   },
+
+  mounted() {
+    this.$root.$on('emitRemoveNote', (data) => {
+      let noteIndex = this.notes.findIndex((note) => note.id === data.id);
+      this.notes.splice(noteIndex, 1);
+    });
+  },
 };
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
