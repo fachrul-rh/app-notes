@@ -17,7 +17,7 @@
     </div>
     <div class="kanan">
       <!-- Form -->
-      <FormNotes :propSaveNote="saveNote" :propDataForm="dataform" />
+      <FormNotes :propRemoveNote="removeNote" :propSaveNote="saveNote" :propUpdateNote="updateNote" :propDataForm="dataform" />
     </div>
   </div>
 </template>
@@ -45,14 +45,31 @@ export default {
     editNote(id) {
       // console.log('app Vue' + id);
       this.dataform = this.notes.find((note) => note.id === id);
-      console.log(this.dataform);
     },
     newNote() {
       // kosong dulu
+      this.dataform = { id: 0, title: '', description: '' };
     },
     saveNote(title, description) {
-      let newNote = { title: title, description: description };
+      let newId = 0;
+      if (this.notes.length === 0) {
+        newId = 1;
+      } else {
+        newId = this.notes[this.notes.length - 1].id + 1;
+      }
+
+      let newNote = { id: newId, title: title, description: description };
       this.notes.push(newNote);
+      this.editNote(newId);
+    },
+    updateNote(id, title, description) {
+      let noteIndex = this.notes.findIndex((note) => note.id === id);
+      this.notes[noteIndex].title = title;
+      this.notes[noteIndex].description = description;
+    },
+    removeNote(id) {
+      let noteIndex = this.notes.findIndex((note) => note.id === id);
+      this.notes.splice(noteIndex, 1);
     },
   },
 };
