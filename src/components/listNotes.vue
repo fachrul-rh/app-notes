@@ -30,6 +30,7 @@ export default {
   methods: {
     editNote(id) {
       let dataform = this.notes.find((note) => note.id === id);
+      dataform.mode = 'update';
 
       this.$root.$emit('emitForm', dataform);
     },

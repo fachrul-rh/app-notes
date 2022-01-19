@@ -28,22 +28,22 @@ export default {
       mode: 'save',
     };
   },
-  methods: {      
-    submitSave() {                    
-        let data = {
+  methods: {
+    submitSave() {
+      let data = {
         title: this.title,
         description: this.description,
       };
       this.$root.$emit('emitSaveNote', data);
-      }
     },
-    submitUpdate() {      
+
+    submitUpdate() {
       let data = {
         id: this.id,
         title: this.title,
         description: this.description,
-        }        
-        this.$root.$emit('emitUpdateNote', data);
+      };
+      this.$root.$emit('emitUpdateNote', data);
     },
 
     submitRemove() {
@@ -60,8 +60,9 @@ export default {
 
   mounted() {
     this.$root.$on('emitForm', (data) => {
-      (this.id = data.id), (this.title = data.title), (this.description = data.description), (this.mode = note.mode);
+      (this.id = data.id), (this.title = data.title), (this.description = data.description), (this.mode = data.mode);
     });
+  },
 };
 </script>
 
