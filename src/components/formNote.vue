@@ -1,9 +1,10 @@
 <template>
   <div class="formNotes">
-    <form @submit="submitNote">
+    <form>
       <div class="menu">
         <button type="button" @click="submitRemove" class="bg-danger btn btn-delete">Delete</button>
-        <button type="submit" class="bg-success btn">Save</button>
+        <button type="button" @click="submitSave" class="bg-success btn" v-if="mode == 'save'">Save</button>
+        <button type="button" @click="submitUpdate" class="bg-success btn" v-if="mode == 'update'">Update</button>
       </div>
 
       <div class="content">
@@ -24,23 +25,27 @@ export default {
       id: '0',
       title: '',
       description: '',
+      mode: 'save',
     };
   },
-  methods: {
-    submitNote(e) {
-      e.preventDefault();
-
-      let data = {
+  methods: {      
+    submitSave() {                    
+        let data = {
         title: this.title,
         description: this.description,
       };
-      if (this.id === 0) {
-        this.$root.$emit('emitSaveNote', data);
-      } else {
-        data.id = this.id;
-        this.$root.$emit('emitUpdateNote', data);
+      this.$root.$emit('emitSaveNote', data);
       }
     },
+    submitUpdate() {      
+      let data = {
+        id: this.id,
+        title: this.title,
+        description: this.description,
+        }        
+        this.$root.$emit('emitUpdateNote', data);
+    },
+
     submitRemove() {
       let data = { id: this.id };
       this.$root.$emit('emitRemoveNote', data);
@@ -52,11 +57,11 @@ export default {
       this.description = '';
     },
   },
+
   mounted() {
     this.$root.$on('emitForm', (data) => {
-      (this.id = data.id), (this.title = data.title), (this.description = data.description);
+      (this.id = data.id), (this.title = data.title), (this.description = data.description), (this.mode = note.mode);
     });
-  },
 };
 </script>
 

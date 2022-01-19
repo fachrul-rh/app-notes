@@ -37,8 +37,8 @@ export default {
   },
   methods: {
     newNote() {
-      let dataform = { id: 0, title: '', description: '' };
-      this.$root.$emit('emitForm', dataform);
+      this.dataform = { id: 0, title: '', description: '', mode: 'save' };
+      this.$root.$emit('emitForm', dataform);     
     },
   },
 };
