@@ -42,13 +42,14 @@ export default {
     FormNotes,
   },
   methods: {
+    newNote() {
+      // kosong dulu
+      this.dataform = { id: 0, title: '', description: '', mode: 'save' };
+    },
     editNote(id) {
       // console.log('app Vue' + id);
       this.dataform = this.notes.find((note) => note.id === id);
-    },
-    newNote() {
-      // kosong dulu
-      this.dataform = { id: 0, title: '', description: '' };
+      this.dataform.mode = 'update';
     },
     saveNote(title, description) {
       let newId = 0;

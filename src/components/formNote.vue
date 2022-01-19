@@ -1,9 +1,10 @@
 <template>
   <div class="formNotes">
-    <form @submit="submitNote">
+    <form>
       <div class="menu">
         <button type="button" @click="submitRemove" class="bg-danger btn btn-delete">Delete</button>
-        <button type="submit" class="bg-success btn">Save</button>
+        <button type="button" @click="submitSave" class="bg-success btn" v-if="mode == 'save'">Save</button>
+        <button type="button" @click="submitUpdate" class="bg-success btn" v-if="mode == 'update'">Update</button>
       </div>
 
       <div class="content">
@@ -37,17 +38,19 @@ export default {
       id: '0',
       title: '',
       description: '',
+      mode: 'save',
     };
   },
   methods: {
-    submitNote(e) {
-      e.preventDefault();
+    submitSave() {
       if (this.id === 0) {
         this.propSaveNote(this.title, this.description);
-      } else {
-        this.propUpdateNote(this.id, this.title, this.description);
       }
     },
+    submitUpdate() {
+      this.propUpdateNote(this.id, this.title, this.description);
+    },
+
     submitRemove() {
       this.propRemoveNote(this.id);
       this.resetInput();
@@ -60,7 +63,7 @@ export default {
   },
   watch: {
     propDataForm: function (note) {
-      (this.id = note.id), (this.title = note.title), (this.description = note.description);
+      (this.id = note.id), (this.title = note.title), (this.description = note.description), (this.mode = note.mode);
     },
   },
 };
