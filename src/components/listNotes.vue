@@ -1,8 +1,8 @@
 <template>
   <div class="listNotes">
     <ul>
-      <li v-for="(row, index) in propNotes" :key="index">
-        <button class="btn-note" @click="idNote(row.id)">
+      <li v-for="(row, index) in notes" :key="index">
+        <button class="btn-note" @click="editNote(row.id)">
           <label for="">{{ row.title }}</label>
           <span>{{ row.description }}</span>
         </button>
@@ -15,20 +15,53 @@
 export default {
   name: 'listNotes',
   data: function () {
-    return {};
+    return {
+      notes: [
+        { id: 1, title: 'Wegodev', description: 'Ini isi wegodev' },
+        { id: 2, title: 'Super User', description: 'Ini adalah kamu' },
+      ],
+    };
   },
   props: {
-    propNotes: {
-      type: Array,
-    },
     propEditNote: {
       type: Function,
     },
   },
   methods: {
-    idNote(id) {
-      this.propEditNote(id);
+    editNote(id) {
+      let dataform = this.notes.find((note) => note.id === id);
+
+      this.$root.$emit('emitForm', dataform);
     },
+    createNewId() {
+      let newId = 0;
+      if (this.notes.length === 0) {
+        newId = 1;
+      } else {
+        newId = this.notes[this.notes.length - 1].id + 1;
+      }
+
+      return newId;
+    },
+  },
+
+  mounted() {
+    this.$root.$on('emitRemoveNote', (data) => {
+      let noteIndex = this.notes.findIndex((note) => note.id === data.id);
+      this.notes.splice(noteIndex, 1);
+    });
+
+    this.$root.$on('emitUpdateNote', (data) => {
+      let noteIndex = this.notes.findIndex((note) => note.id === data.id);
+      this.notes[noteIndex].title = data.title;
+      this.notes[noteIndex].description = data.description;
+    });
+    this.$root.$on('emitSaveNote', (data) => {
+      let newId = this.createNewId();
+      let newNote = { id: newId, title: data.title, description: data.description };
+      this.notes.push(newNote);
+      this.editNote(newId);
+    });
   },
 };
 </script>
