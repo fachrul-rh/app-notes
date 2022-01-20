@@ -12,14 +12,13 @@
 </template>
 
 <script type="text/javascript">
+import axios from 'axios';
+
 export default {
   name: 'listNotes',
   data: function () {
     return {
-      notes: [
-        { id: 1, title: 'Wegodev', description: 'Ini isi wegodev' },
-        { id: 2, title: 'Super User', description: 'Ini adalah kamu' },
-      ],
+      notes: [],
     };
   },
   props: {
@@ -44,9 +43,17 @@ export default {
 
       return newId;
     },
+    getData() {
+      axios.get('http://localhost/wegodev-notes/note').then((response) => {
+        console.log(response);
+        this.notes = response.data;
+      });
+    },
   },
 
   mounted() {
+    this.getData();
+
     this.$root.$on('emitRemoveNote', (data) => {
       let noteIndex = this.notes.findIndex((note) => note.id === data.id);
       this.notes.splice(noteIndex, 1);
