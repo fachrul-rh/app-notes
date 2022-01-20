@@ -21,11 +21,6 @@ export default {
       notes: [],
     };
   },
-  props: {
-    propEditNote: {
-      type: Function,
-    },
-  },
   methods: {
     editNote(id) {
       let dataform = this.notes.find((note) => note.id === id);
@@ -33,19 +28,8 @@ export default {
 
       this.$root.$emit('emitForm', dataform);
     },
-    createNewId() {
-      let newId = 0;
-      if (this.notes.length === 0) {
-        newId = 1;
-      } else {
-        newId = this.notes[this.notes.length - 1].id + 1;
-      }
-
-      return newId;
-    },
     getData() {
       axios.get('http://localhost/wegodev-notes/note').then((response) => {
-        console.log(response);
         this.notes = response.data;
       });
     },
@@ -65,10 +49,9 @@ export default {
       this.notes[noteIndex].description = data.description;
     });
     this.$root.$on('emitSaveNote', (data) => {
-      let newId = this.createNewId();
-      let newNote = { id: newId, title: data.title, description: data.description };
-      this.notes.push(newNote);
-      this.editNote(newId);
+      let newNote = { id: data.id, title: data.title, description: data.description };
+      this.notes.unshift(newNote);
+      this.editNote(data.id);
     });
   },
 };
